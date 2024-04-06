@@ -1,12 +1,37 @@
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../components/Rating";
-import products from "../products";
+import axios from "axios";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
-  const product = products.find((p) => p._id === productId);
+  const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const { data } = await axios.get(`/api/products/${productId}`);
+        setProduct(data);
+        setLoading(false);
+      } catch (error) {
+        setError("Error fetching product");
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [productId]);
+
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
+
+  if (error) {
+    return <h2>{error}</h2>;
+  }
+
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
@@ -14,8 +39,7 @@ const ProductScreen = () => {
       </Link>
       <Row>
         <Col md={5}>
-          <Image src={product.image} alt={product.name} fluid />{" "}
-          {/*Bootstrap image component */}
+          <Image src={product.image} alt={product.name} fluid />
         </Col>
         <Col md={4}>
           <ListGroup variant="flush">
