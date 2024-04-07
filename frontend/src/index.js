@@ -1,34 +1,25 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./assets/styles/bootstrap.custom.css";
 import "./assets/styles/index.css";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
-import products from "./products"; 
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route index={true} path="/" element={<HomeScreen />} />
-      <Route path="/product/:id" element={<ProductScreen />} />
-    </Route>
-  )
-);
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
+ReactDOM.render(
   <React.StrictMode>
-    <RouterProvider router={router} products={products} />
-  </React.StrictMode>
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index={true} element={<HomeScreen />} />
+          <Route path="/product/:id" element={<ProductScreen />} />
+        </Route>
+      </Routes>
+    </Router>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 reportWebVitals();
